@@ -88,8 +88,10 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	if port == "" {
-                port = ":8081"
-        }
+		port = ":8081"
+        } else {
+		port = ":" + port
+	}
 
 	fmt.Printf("::config\n")
 	fmt.Printf("\t::secret: " + secret + "\n\n")
