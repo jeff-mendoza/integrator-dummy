@@ -12,6 +12,11 @@ import (
 	"os"
 )
 
+var (
+	secret = os.Getenv("SECRET")
+	port = os.Getenv("PORT") 
+)
+
 type IntegratorChallengeResponse struct {
 	EncryptedChallenge string `json:"encrypted_challenge"`
 }
@@ -82,11 +87,16 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
-	secret = os.Getenv("SECRET")
+	if port == "" {
+                port = ":8081"
+        }
+
 	fmt.Printf("::config\n")
 	fmt.Printf("\t::secret: " + secret + "\n\n")
+	fmt.Printf("\t::port: " + port + "\n\n")
 
 	http.HandleFunc("/ping", pingHandler)
 	http.HandleFunc("/webhook", webhookHandler)
-	log.Fatal(http.ListenAndServe(":8081", nil))
+
+	log.Fatal(http.ListenAndServe(port, nil))
 }
